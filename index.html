@@ -66,7 +66,7 @@
     <!-- Popups -->
 <div id="popupUSDC" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
     <div class="bg-white p-6 rounded-lg shadow-lg">
-        <h2 class="text-lg font-bold">Scan the QR code, pay and add coins.</h2>
+        <h2 class="text-lg font-bold">Scan the QR code, pay <span id="buyAmount" placeholder="20843.8"></span> MON</h2>
         <center><p class="mt-2"><b>USDC</b> Ethereum (ERC-20) Information</p></center>
 		<center><p><img src="USDCQRPay.png" alt="Creat Coin" width="200" height="200" class="me-2"></p></center>
 					<center><pre>0x786F854113D2F739DB09544C8E15aba97A2b18C0</pre>
@@ -80,7 +80,7 @@
 
 <div id="popupETH" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
     <div class="bg-white p-6 rounded-lg shadow-lg">
-        <h2 class="text-lg font-bold">ETH Information</h2>
+        <h2 class="text-lg font-bold"><span id="buyAmount" placeholder="20843.8"></span> MON</h2>
         <center><p class="mt-2"></p></center>
 		<center><p><img src="USDCQRPay.png" alt="Creat Coin" width="200" height="200" class="me-2"></p></center>
 					<center><pre>0x786F854113D2F739DB09544C8E15aba97A2b18C0</pre>
@@ -134,6 +134,12 @@
     function showPopup() {
         const selectedCurrency = document.getElementById('sellCurrency').value;
         const popupId = selectedCurrency === 'ETH' ? 'popupETH' : 'popupUSDC';
+		// Get the calculated MONAD amount
+        const monadAmount = document.getElementById('buyAmount').value;
+        
+        // Update the popup with the calculated USDC value
+        document.getElementById('popupUSDC').querySelector('span#buyAmount').innerText = monadAmount;
+		document.getElementById('popupETH').querySelector('span#buyAmount').innerText = monadAmount;
         openPopup(popupId);
     }
 
